@@ -1,0 +1,73 @@
+<html>
+<title>Kukrookoo Reminder</title>
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="node_modules\jquery\dist\jquery.min.js"></script>
+    <script src="node_modules\bootstrap\dist\js\bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    
+   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="node_modules\bootstrap\dist\css\bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+
+  <script>
+  $( function() {
+    $( "#datepicker" ).datepicker();
+    $( "#anim" ).on( "change", function() {
+      $( "#datepicker" ).datepicker( "option", "showAnim", $( this ).val() );
+    });
+  } );
+  </script>
+
+    <body>
+
+        <header class="header jumbotron">
+            <h1>KukrooKoo <img src="images/logo.png"> Reminder </h1>
+
+        </header>
+
+        <section class="container-fluid body ">
+
+         <section class="col-md-6 col-sm-10 col-xs-10">
+
+            <section class="picker-body">
+                
+            <input type="text" placeholder="Remind me about">
+            <label>Enter Date </label>
+            <input type="text" id="datepicker" size="30">
+            <label>Enter Time </label>
+            <input type="time" >
+            </section>
+           </section>     
+        <section class=" rem-list col-md-5 col-sm-10 col-xs-10">
+           <h3>Upcoming Reminders</h3> 
+            <section class="">
+               
+            </section>
+        </section>
+        </section>
+
+
+
+        <!--Reminder Modal-->
+        <div id="rem-modal" class="w3-modal">
+                <div class="w3-modal-content w3-card-8">
+                    <header class="w3-container w3-teal"> 
+                        <span onclick="document.getElementById('rem-modal').style.display='none'" 
+                             class="w3-button w3-display-topright">&times;</span>
+                        <h3>Hey do you remember this !</h3>
+                    </header>
+                <div class="w3-container">
+                        <p>Reminder text..</p>
+                        <p>Time text</p>
+                </div>
+                <footer class="w3-container w3-teal">
+                <p>Date text</p>
+                </footer>
+                </div>
+        </div>
+
+    </body>
+
+   </html> 
