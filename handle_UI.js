@@ -37,7 +37,8 @@ window.addEventListener('load', function () {
     {
 
 
-        if (UIObj.rem_text.value !== '' && UIObj.rem_date.value !== '' && UIObj.rem_time.value !== '' || UIObj.rem_text.value !== ' ') {
+        if (UIObj.rem_text.value !== '' && UIObj.rem_text.value !== ' ' && UIObj.rem_date.value !== '' && UIObj.rem_time.value !== '') 
+        {
             //Setting the reminder Obj;
             var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, UIObj.list_index, false);
 
