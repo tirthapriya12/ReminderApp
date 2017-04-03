@@ -70,7 +70,7 @@ function DBManager() {
                 return remlist_fetch;
 
         }
-        // for (i in obj)
+        // for (i in obj)//
     };
 
 
