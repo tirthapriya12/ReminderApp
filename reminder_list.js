@@ -6,8 +6,8 @@ function ReminderList()
 
             console.log('i='+i);
             console.log(obj);
-            debugger;
-            remArrList.push(obj);
+            
+            remArrList[i]=obj;//push(obj);
             console.log( remArrList);
             console.log(remArrList[i]+"    "+i);
             db_manager.insertData(remArrList[i],i);
@@ -15,15 +15,20 @@ function ReminderList()
 
     };
 
-    this.delRem=function(){
+    this.delRem=function(index){
 
+        db_manager.remData(index);
 
 
     };
     
     this.fetch=function(){
 
-
+      var remArrListfetch=db_manager.fetchData();
+        
+         console.log(remArrListfetch);
+        return remArrListfetch;
+       
 
     };
 
