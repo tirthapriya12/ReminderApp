@@ -173,7 +173,10 @@ input[type=time]{
     font-size: 2em;
 }
 
+#rem-modal{
 
+    display: none;
+}
 
 .w3-container
 {
