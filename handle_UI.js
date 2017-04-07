@@ -9,18 +9,18 @@ window.addEventListener('load', function () {
         addBtn: document.getElementById('addBtn'),
         rem_list: new ReminderList(),
         list_index: 0,
-        watcher:new Watcher(),
-        timelist:[]
+        watcher: new Watcher(),
+        timelist: []
     };
 
-    
+
     UIObj.addBtn.addEventListener('click', inputData);
-    
-    
+
+
     updateUI();//updates UI on page load
 
 
-    
+
 
     (function () {
 
@@ -39,6 +39,9 @@ window.addEventListener('load', function () {
     })();
 
     reminderChecker();
+
+    strikeThroughElapsed();
+
     function inputData()// takes input on button click
     {
 
@@ -46,19 +49,20 @@ window.addEventListener('load', function () {
         if (UIObj.rem_text.value !== '' && UIObj.rem_text.value !== ' ' && UIObj.rem_date.value !== '' && UIObj.rem_time.value !== '') {
             //Setting the reminder Obj;
 
-            if(!(checkDuplicateRem( UIObj.rem_date.value, UIObj.rem_time.value )))
-           { 
+            if (!(checkDuplicateRem(UIObj.rem_date.value, UIObj.rem_time.value))) {
 
-            var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, UIObj.list_index, false);
+                var index=UIObj.rem_list.checkTotalIndex();
+                var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, index, false);
 
-            createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, UIObj.list_index, false);
+                addToRemList(rem_obj);
+                createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, index, false);
 
-            console.log(rem_obj);
-            addToRemList(rem_obj, UIObj.list_index);
-            fillTimeList();
-            UIObj.list_index++;
-        }
-        else{
+                console.log(rem_obj);
+                
+                fillTimeList();
+                UIObj.list_index++;
+            }
+            else {
                 alert('duplicate Reminder exists already');
             }
         }
@@ -141,8 +145,8 @@ window.addEventListener('load', function () {
     }
 
 
-    
-   
+
+
 
     function addToRemList(rem_obj, i) {
 
@@ -193,104 +197,125 @@ window.addEventListener('load', function () {
 
     }
 
-    function checkDuplicateRem(date,time)
-    {   
-        var flag=false;
+    function checkDuplicateRem(date, time) {
+        var flag = false;
 
-            for(i in  UIObj.timelist)
-            {
-                if( UIObj.timelist[i].Rem_time==time &&  UIObj.timelist[i].Rem_date==date)
-                {
-                    flag=true;
-                }
+        for (i in UIObj.timelist) {
+            if (UIObj.timelist[i].Rem_time == time && UIObj.timelist[i].Rem_date == date) {
+                flag = true;
             }
+        }
 
-           return flag;     
+        return flag;
     }
 
     function fillTimeList() // fills timelist array on load which will be used to check duplcate reminder
     {
+        var fetchedList = UIObj.rem_list.fetch();
+        for (i in fetchedList) {
+            UIObj.timelist[i] = { 'Rem_time': fetchedList[i].Rem_time, 'Rem_date': fetchedList[i].Rem_date };
+        }
+
+    }
+
+    function reminderChecker() {
+
+        setInterval(function () {
             var fetchedList = UIObj.rem_list.fetch();
-            for(i in fetchedList)
-            {
-                UIObj.timelist[i]={'Rem_time': fetchedList[i].Rem_time , 'Rem_date': fetchedList[i].Rem_date};
+
+            var index = UIObj.watcher.checkRem(UIObj.timelist);
+
+            if (index >= 0) {
+
+                var text = document.querySelectorAll('.w3-container p');
+
+                document.getElementById('rem-modal').style.display = 'block';
+                document.querySelector('.w3-display-topright').onclick = modalHandle;
+                document.getElementsByTagName('audio')[0].play();
+
+                text[0].innerHTML = fetchedList[index].Rem_title;
+                text[1].innerHTML = fetchedList[index].Rem_time;
+                text[2].innerHTML = fetchedList[index].Rem_date;
+
+                notifyMe(text[0].innerText, text[1].innerText, text[2].innerText);
+
             }
-            console.log( UIObj.timelist);
-    }
 
-    function reminderChecker()
-    {
 
-        setInterval(function(){
-             var fetchedList = UIObj.rem_list.fetch();
 
-               var index= UIObj.watcher.checkRem( UIObj.timelist);
+        }, 50000);
 
-               if(index>=0)
-             {
-
-                var text=document.querySelectorAll('.w3-container p');
-                
-               document.getElementById('rem-modal').style.display='block';
-               document.querySelector('.w3-display-topright').onclick=modalHandle;
-               document.getElementsByTagName('audio')[0].play();
-               
-               text[0].innerHTML=fetchedList[index].Rem_title;
-               text[1].innerHTML=fetchedList[index].Rem_time;
-               text[2].innerHTML=fetchedList[index].Rem_date;
-
-               notifyMe(text[0]);
-
-             }  
-               
-              
-
-        },6000);
-         
 
     }
 
-    
-    function modalHandle()
-    {
-       
-        document.getElementById('rem-modal').style.display='none';
+
+    function modalHandle() {
+
+        document.getElementById('rem-modal').style.display = 'none';
         document.getElementsByTagName('audio')[0].pause();
 
-        
+
 
     }
 
 
 
-    function notifyMe(text) {
-  // Let's check if the browser supports notifications
-  if (!("Notification" in window)) {
-    alert("This browser does not support desktop notification");
-  }
+    function notifyMe(text, time, date) {
+        // Let's check if the browser supports notifications
 
-  // Let's check whether notification permissions have already been granted
-  else if (Notification.permission === "granted") {
-    // If it's okay let's create a notification
-    var notification = new Notification("Reminder! "+' '+text);
-  }
+        var options = {
+            body: text + ' Time: ' + time + ' Date:' + date,
+            icon: 'images/chicken.png'
+        };
 
-  // Otherwise, we need to ask the user for permission
-  else if (Notification.permission !== "denied") {
-    Notification.requestPermission(function (permission) {
-      // If the user accepts, let's create a notification
-      if (permission === "granted") {
-        var notification = new Notification("Reminder!  "+' '+text);
-         
-      }
-    });
-  }
+        if (!("Notification" in window)) {
+            alert("This browser does not support desktop notification");
+        }
 
-  // At last, if the user has denied notifications, and you 
-  // want to be respectful there is no need to bother them any more.
-}
+        // Let's check whether notification permissions have already been granted
+        else if (Notification.permission === "granted") {
+            // If it's okay let's create a notification
+            var notification = new Notification("Reminder!", options);
 
- 
+        }
+
+        // Otherwise, we need to ask the user for permission
+        else if (Notification.permission !== "denied") {
+            Notification.requestPermission(function (permission) {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                    var notification = new Notification("Reminder! ", options);
+
+                }
+            });
+        }
+
+        // At last, if the user has denied notifications, and you 
+        // want to be respectful there is no need to bother them any more.
+    }
+
+
+    function strikeThroughElapsed()
+    {
+            setInterval(function(){
+
+
+
+
+                   for(i in UIObj.lilist)
+                   {
+                        UIObj.lilist[i].style['text-decoration']='line-through';
+                        
+
+                   }
+
+
+
+            },500);
+
+
+    }
+
 
 });
 

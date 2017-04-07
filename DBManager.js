@@ -1,8 +1,9 @@
 function DBManager() {
 
     this.insertData = function (obj, i) {
-        var storage_obj = [];
-        var remlist = [], remlist_fetch = [];
+        var storage_obj = [],
+         remlist = [], 
+         remlist_fetch = [];
 
         if (localStorage) {
 
@@ -10,10 +11,10 @@ function DBManager() {
             if (localStorage.getItem('remlist')) {
 
                 remlist = JSON.parse(localStorage.getItem('remlist'));
-                console.log(remlist);
+                
                 remlist.push(obj);
                 console.log(remlist);
-                // storage_obj = JSON.stringify(remlist);
+                
 
                 localStorage.setItem('remlist', JSON.stringify(remlist));
 
@@ -22,8 +23,7 @@ function DBManager() {
 
 
                 storage_obj.push(obj);
-                // console.log(storage_obj);
-                // console.log(JSON.stringify(storage_obj))
+                
                 localStorage.setItem('remlist', JSON.stringify(storage_obj));
 
             }
@@ -65,7 +65,7 @@ function DBManager() {
             return remlist_fetch;
 
         }
-        // for (i in obj)//
+       
     };
 
 

@@ -1,15 +1,40 @@
 function ReminderList() {
-    var remArrList = [];
-    var db_manager = new DBManager();
-    this.addRem = function (obj, i) {
+    var remArrList = [],
+        db_manager = new DBManager();
+    this.checkTotalIndex=function() {
 
-        //console.log('i=' + i);
-        //console.log(obj);
+        if (localStorage.length == 0) {
+            localStorage.setItem('id', '0');
 
-        remArrList[i] = obj;//push(obj);
-        //console.log(remArrList);
-        //console.log(remArrList[i] + "    " + i);
+        }
+        else {
+            var id = localStorage.getItem('id');
+            id = parseInt(id);
+            return id;
+
+        }
+
+    };
+
+    function updateId(i)
+    {
+        i++;
+        localStorage.setItem('id',i);
+
+
+    }
+
+    this.addRem = function (obj) {
+
+
+        var i = this.checkTotalIndex();
+        remArrList[i] = obj;
         db_manager.insertData(remArrList[i], i);
+
+        updateId(i);
+
+
+        return i;
 
 
     };
