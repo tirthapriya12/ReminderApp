@@ -40,7 +40,11 @@ window.addEventListener('load', function () {
 
     reminderChecker();
 
-    strikeThroughElapsed();
+
+    
+       
+    
+    
 
     function inputData()// takes input on button click
     {
@@ -51,16 +55,20 @@ window.addEventListener('load', function () {
 
             if (!(checkDuplicateRem(UIObj.rem_date.value, UIObj.rem_time.value))) {
 
-                var index=UIObj.rem_list.checkTotalIndex();
-                var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, index, false);
+                var id=UIObj.rem_list.checkTotalIndex();
+                var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, id, false);
 
                 addToRemList(rem_obj);
-                createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, index, false);
+                createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value,id, UIObj.list_index, false);
 
+               
+                   
+                   
                
                 
                 fillTimeList();
                 UIObj.list_index++;
+                strikeThroughElapsed();
             }
             else {
                 alert('duplicate Reminder exists already');
@@ -110,7 +118,7 @@ window.addEventListener('load', function () {
     }
 
 
-    function createListElm(rem_text1, rem_time1, rem_date1, index, elapsed1) {
+    function createListElm(rem_text1, rem_time1, rem_date1,id, index, elapsed1) {
 
 
 
@@ -171,6 +179,7 @@ window.addEventListener('load', function () {
         }
 
         fillTimeList();
+         strikeThroughElapsed();
     }
 
 
@@ -240,7 +249,7 @@ window.addEventListener('load', function () {
 
 
 
-        }, 50000);
+        }, 45000);
 
 
     }
@@ -250,7 +259,7 @@ window.addEventListener('load', function () {
 
         document.getElementById('rem-modal').style.display = 'none';
         document.getElementsByTagName('audio')[0].pause();
-
+        strikeThroughElapsed();
 
 
     }
@@ -261,7 +270,7 @@ window.addEventListener('load', function () {
         
 
         var options = {
-            body: text + ' Time: ' + time + ' Date:' + date,
+            body: text + '\n\n Time: ' + time + '\n Date:' + date,
             icon: 'images/chicken.png'
         };
 
@@ -293,21 +302,42 @@ window.addEventListener('load', function () {
 
     function strikeThroughElapsed()
     {
-            setInterval(function(){
+            var d=new Date();
+            var dd=(d.getDate()<10)?'0'+d.getDate():d.getDate(), 
+            mm=((d.getMonth()+1)<10)?'0'+(d.getMonth()+1):(d.getMonth()+1) ,
+            yyyy=d.getFullYear();
+            var date=yyyy+'-'+mm+'-'+dd;
+            var hours=(d.getHours()<10)? ('0'+d.getHours()):d.getHours(),
+             min=(d.getMinutes()<10)? ('0'+d.getMinutes()):d.getMinutes();
+            var time=hours+':'+min;    
+
+
+            
 
 
 
+ 
+                   for(i in UIObj.timelist)
+                   {    
 
-                   for(i in UIObj.lilist)
-                   {
-                        UIObj.lilist[i].style['text-decoration']='line-through';
+                       console.log (UIObj.timelist[i].Rem_time +"  "+UIObj.timelist[i].Rem_date );
+                       if(UIObj.timelist[i].Rem_date <= date)
+                       {    
+
+                           if(UIObj.timelist[i].Rem_time <= time)
+                            {
+                                UIObj.lilist[i].style['text-decoration']='line-through';
+                            }
+
+                       }
+                        
                         
 
                    }
 
 
 
-            },500);
+            
 
 
     }
