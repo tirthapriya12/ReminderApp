@@ -50,7 +50,7 @@ function ReminderList() {
 
         var remArrListfetch = db_manager.fetchData();
 
-        //console.log(remArrListfetch);
+       
         return remArrListfetch;
 
 

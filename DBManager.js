@@ -7,13 +7,13 @@ function DBManager() {
 
         if (localStorage) {
 
-            console.log(obj + ' ' + i + ' remlist[' + i + ']');
+           
             if (localStorage.getItem('remlist')) {
 
                 remlist = JSON.parse(localStorage.getItem('remlist'));
                 
                 remlist.push(obj);
-                console.log(remlist);
+                
                 
 
                 localStorage.setItem('remlist', JSON.stringify(remlist));
@@ -38,8 +38,7 @@ function DBManager() {
         remlist_fetch = JSON.parse(localStorage.getItem('remlist'));
         for (i in remlist_fetch) {
             if (remlist_fetch[i].id == key) {
-                console.log(key);
-                console.log(remlist_fetch[i]);
+               
                 if (remlist_fetch.length == 1) {
                     remlist_fetch.pop();
                 }

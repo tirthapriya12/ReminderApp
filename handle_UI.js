@@ -57,7 +57,7 @@ window.addEventListener('load', function () {
                 addToRemList(rem_obj);
                 createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, index, false);
 
-                console.log(rem_obj);
+               
                 
                 fillTimeList();
                 UIObj.list_index++;
@@ -79,12 +79,12 @@ window.addEventListener('load', function () {
 
     function addCloseBtn(x) {
 
-        console.log('called');
+        
         var span = document.createElement("SPAN");
         var txt = document.createTextNode("\u00D7");
         span.className = "close";
         span.appendChild(txt);
-        console.log(UIObj.lilist[x]);
+       
         UIObj.lilist[x].appendChild(span);
 
         attachCloseBtnIconEvent(x);
@@ -122,9 +122,7 @@ window.addEventListener('load', function () {
         li.innerHTML = '<span style="font-size:10px;">' + rem_time1 + ' - ' + rem_date1 + '   </span><br/>';
         li.innerHTML += '<p>' + rem_text1 + '</p>';
         li.setAttribute('data-id', index);
-        //var li_text=document.createTextNode();
-
-        //li.appendChild(li_text);
+      
 
 
         ul.appendChild(li);
@@ -136,7 +134,7 @@ window.addEventListener('load', function () {
 
 
 
-        //  console.log(rem_obj);
+        
 
 
 
@@ -152,7 +150,6 @@ window.addEventListener('load', function () {
 
 
 
-        console.log(rem_obj);
         UIObj.rem_list.addRem(rem_obj, i);  //add reminder to reminderlist array
     }
 
@@ -163,7 +160,7 @@ window.addEventListener('load', function () {
     {
 
         var fetchedList = UIObj.rem_list.fetch();
-        console.log(fetchedList);
+       
 
         for (i in fetchedList) {
             updateUiList(fetchedList[i].Rem_title, fetchedList[i].Rem_time, fetchedList[i].Rem_date, i, fetchedList[i].id, fetchedList[i].elapsed);
@@ -261,7 +258,7 @@ window.addEventListener('load', function () {
 
 
     function notifyMe(text, time, date) {
-        // Let's check if the browser supports notifications
+        
 
         var options = {
             body: text + ' Time: ' + time + ' Date:' + date,
@@ -272,17 +269,17 @@ window.addEventListener('load', function () {
             alert("This browser does not support desktop notification");
         }
 
-        // Let's check whether notification permissions have already been granted
+        
         else if (Notification.permission === "granted") {
-            // If it's okay let's create a notification
+           
             var notification = new Notification("Reminder!", options);
 
         }
 
-        // Otherwise, we need to ask the user for permission
+        
         else if (Notification.permission !== "denied") {
             Notification.requestPermission(function (permission) {
-                // If the user accepts, let's create a notification
+                
                 if (permission === "granted") {
                     var notification = new Notification("Reminder! ", options);
 
@@ -290,8 +287,7 @@ window.addEventListener('load', function () {
             });
         }
 
-        // At last, if the user has denied notifications, and you 
-        // want to be respectful there is no need to bother them any more.
+        
     }
 
 
