@@ -56,5 +56,11 @@ function ReminderList() {
 
     };
 
+    this.updateData=function(key)
+    {
+            db_manager.updateData(key);
+
+    };
+
 
 }

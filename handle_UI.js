@@ -29,6 +29,7 @@ window.addEventListener('load', function () {
 
         if (date.getMinutes() < 10) {
 
+
             UIObj.rem_time.value = date.getHours() + ":0" + date.getMinutes();
         }
         else {
@@ -36,15 +37,16 @@ window.addEventListener('load', function () {
         }
 
 
+
     })();
 
     reminderChecker();
 
 
-    
-       
-    
-    
+
+
+
+
 
     function inputData()// takes input on button click
     {
@@ -55,17 +57,17 @@ window.addEventListener('load', function () {
 
             if (!(checkDuplicateRem(UIObj.rem_date.value, UIObj.rem_time.value))) {
 
-                var id=UIObj.rem_list.checkTotalIndex();
+                var id = UIObj.rem_list.checkTotalIndex();
                 var rem_obj = new Reminder(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, id, false);
 
                 addToRemList(rem_obj);
-                createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value,id, UIObj.list_index, false);
+                createListElm(UIObj.rem_text.value, UIObj.rem_time.value, UIObj.rem_date.value, id, UIObj.list_index, false);
 
-               
-                   
-                   
-               
-                
+
+
+
+
+
                 fillTimeList();
                 UIObj.list_index++;
                 strikeThroughElapsed();
@@ -87,12 +89,12 @@ window.addEventListener('load', function () {
 
     function addCloseBtn(x) {
 
-        
+
         var span = document.createElement("SPAN");
         var txt = document.createTextNode("\u00D7");
         span.className = "close";
         span.appendChild(txt);
-       
+
         UIObj.lilist[x].appendChild(span);
 
         attachCloseBtnIconEvent(x);
@@ -118,7 +120,7 @@ window.addEventListener('load', function () {
     }
 
 
-    function createListElm(rem_text1, rem_time1, rem_date1,id, index, elapsed1) {
+    function createListElm(rem_text1, rem_time1, rem_date1, id, index, elapsed1) {
 
 
 
@@ -130,7 +132,7 @@ window.addEventListener('load', function () {
         li.innerHTML = '<span style="font-size:10px;">' + rem_time1 + ' - ' + rem_date1 + '   </span><br/>';
         li.innerHTML += '<p>' + rem_text1 + '</p>';
         li.setAttribute('data-id', index);
-      
+
 
 
         ul.appendChild(li);
@@ -142,7 +144,7 @@ window.addEventListener('load', function () {
 
 
 
-        
+
 
 
 
@@ -168,7 +170,7 @@ window.addEventListener('load', function () {
     {
 
         var fetchedList = UIObj.rem_list.fetch();
-       
+
 
         for (i in fetchedList) {
             updateUiList(fetchedList[i].Rem_title, fetchedList[i].Rem_time, fetchedList[i].Rem_date, i, fetchedList[i].id, fetchedList[i].elapsed);
@@ -179,7 +181,7 @@ window.addEventListener('load', function () {
         }
 
         fillTimeList();
-         strikeThroughElapsed();
+        strikeThroughElapsed();
     }
 
 
@@ -233,23 +235,28 @@ window.addEventListener('load', function () {
 
             if (index >= 0) {
 
-                var text = document.querySelectorAll('.w3-container p');
+                if (!fetchedList[index].elapsed) {
 
-                document.getElementById('rem-modal').style.display = 'block';
-                document.querySelector('.w3-display-topright').onclick = modalHandle;
-                document.getElementsByTagName('audio')[0].play();
+                    var text = document.querySelectorAll('.w3-container p');
 
-                text[0].innerHTML = fetchedList[index].Rem_title;
-                text[1].innerHTML = fetchedList[index].Rem_time;
-                text[2].innerHTML = fetchedList[index].Rem_date;
+                    document.getElementById('rem-modal').style.display = 'block';
+                    document.querySelector('.w3-display-topright').onclick = modalHandle;
+                    document.getElementsByTagName('audio')[0].play();
 
-                notifyMe(text[0].innerText, text[1].innerText, text[2].innerText);
+                    text[0].innerHTML = fetchedList[index].Rem_title;
+                    text[1].innerHTML = fetchedList[index].Rem_time;
+                    text[2].innerHTML = fetchedList[index].Rem_date;
+                    UIObj.rem_list.updateData(index);
+                    notifyMe(text[0].innerText, text[1].innerText, text[2].innerText);
+
+                }
+
 
             }
 
 
 
-        }, 45000);
+        }, 1000);
 
 
     }
@@ -267,7 +274,7 @@ window.addEventListener('load', function () {
 
 
     function notifyMe(text, time, date) {
-        
+
 
         var options = {
             body: text + '\n\n Time: ' + time + '\n Date:' + date,
@@ -278,17 +285,17 @@ window.addEventListener('load', function () {
             alert("This browser does not support desktop notification");
         }
 
-        
+
         else if (Notification.permission === "granted") {
-           
+
             var notification = new Notification("Reminder!", options);
 
         }
 
-        
+
         else if (Notification.permission !== "denied") {
             Notification.requestPermission(function (permission) {
-                
+
                 if (permission === "granted") {
                     var notification = new Notification("Reminder! ", options);
 
@@ -296,48 +303,49 @@ window.addEventListener('load', function () {
             });
         }
 
-        
+
     }
 
 
-    function strikeThroughElapsed()
-    {
-            var d=new Date();
-            var dd=(d.getDate()<10)?'0'+d.getDate():d.getDate(), 
-            mm=((d.getMonth()+1)<10)?'0'+(d.getMonth()+1):(d.getMonth()+1) ,
-            yyyy=d.getFullYear();
-            var date=yyyy+'-'+mm+'-'+dd;
-            var hours=(d.getHours()<10)? ('0'+d.getHours()):d.getHours(),
-             min=(d.getMinutes()<10)? ('0'+d.getMinutes()):d.getMinutes();
-            var time=hours+':'+min;    
+    function strikeThroughElapsed() {
+        var d = new Date();
+        var dd = (d.getDate() < 10) ? '0' + d.getDate() : d.getDate(),
+            mm = ((d.getMonth() + 1) < 10) ? '0' + (d.getMonth() + 1) : (d.getMonth() + 1),
+            yyyy = d.getFullYear();
+        var date = yyyy + '-' + mm + '-' + dd;
+        var hours = (d.getHours()%12 < 10) ? ('0' + d.getHours() % 12) : d.getHours() % 12,
+            min = (d.getMinutes()%12 < 10) ? ('0' + d.getMinutes() % 12) : d.getMinutes() % 12;
+        var time = hours + ':' + min;
 
-
-            
-
-
-
- 
-                   for(i in UIObj.timelist)
-                   {    
-
-                       console.log (UIObj.timelist[i].Rem_time +"  "+UIObj.timelist[i].Rem_date );
-                       if(UIObj.timelist[i].Rem_date <= date)
-                       {    
-
-                           if(UIObj.timelist[i].Rem_time <= time)
-                            {
-                                UIObj.lilist[i].style['text-decoration']='line-through';
-                            }
-
-                       }
-                        
-                        
-
-                   }
+        var arr = UIObj.timelist[i].Rem_time;
+        arr = arr.split(':');
+        var UITimehrs=(arr[0]%12 <10)? '0'+arr[0]%12 : arr[0]%12 ,
+        UITimemin=(arr[1]%12 <10)? '0'+arr[1]%12 : arr[0]%12;
+        var UITime=UITimehrs+':'+UITimemin;
 
 
 
-            
+
+
+
+        for (i in UIObj.timelist) {
+
+            console.log(UIObj.timelist[i].Rem_time + "  " + UIObj.timelist[i].Rem_date);
+            if (UIObj.timelist[i].Rem_date <= date) {
+
+                if (UITime <= time) {
+                    UIObj.lilist[i].style['text-decoration'] = 'line-through';
+                }
+
+            }
+
+
+
+        }
+
+
+
+
 
 
     }

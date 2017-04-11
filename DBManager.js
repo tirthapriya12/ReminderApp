@@ -67,5 +67,23 @@ function DBManager() {
        
     };
 
+    this.updateData=function(key)
+    {
+            remlist_fetch = [];//re initialise for this scope
+        remlist_fetch = JSON.parse(localStorage.getItem('remlist'));
+        for (i in remlist_fetch) {
+            if (remlist_fetch[i].id == key) {
+               
+                remlist_fetch[i].elapsed=true;
+
+            }
+
+
+        }
+
+        localStorage.setItem('remlist', JSON.stringify(remlist_fetch));
+
+    };
+
 
 }
